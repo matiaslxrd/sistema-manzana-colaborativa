@@ -1,0 +1,2349 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>SISTEMA DE MANZANAS COLAVORATIVA</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --panel: #ffffff;
+      --border: #e4e4e7;
+      --text: #09090b;
+      --muted: #52525b;
+      --accent: #27272a;
+      --accent-hover: #3f3f46;
+      --grid-bg: #f4f4f5;
+      --grid-border: #d4d4d8;
+      --sub-panel: #fafafa;
+      --axo-base-front: #d4d4d8;
+      --axo-base-side: #a1a1aa;
+    }
+
+    [data-theme="dark"] {
+      --bg: #000000;
+      --panel: #09090b;
+      --border: #27272a;
+      --text: #fafafa;
+      --muted: #a1a1aa;
+      --accent: #27272a;
+      --accent-hover: #3f3f46;
+      --grid-bg: #000000;
+      --grid-border: #3f3f46;
+      --sub-panel: #111113;
+      --axo-base-front: #18181b;
+      --axo-base-side: #09090b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .container {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      max-width: 960px;
+      width: 100%;
+      box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.75);
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 14px;
+    }
+
+    h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+
+    .subtitle {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 18px;
+      align-items: center;
+      margin-bottom: 20px;
+      background: var(--sub-panel);
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.84rem;
+      color: var(--muted);
+    }
+
+    select, input[type="checkbox"] {
+      background: var(--panel);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 5px 8px;
+      font-size: 0.82rem;
+      cursor: pointer;
+    }
+
+    button {
+      background: #fafafa;
+      color: #000000;
+      border: 1px solid #fafafa;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.1s ease, opacity 0.15s ease;
+    }
+
+    [data-theme="light"] button {
+      background: #09090b;
+      color: #ffffff;
+      border-color: #09090b;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    button.secondary {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    [data-theme="light"] button.secondary {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    button.secondary:hover {
+      background: rgba(161, 161, 170, 0.14);
+    }
+
+    /* 1ª JERARQUÍA: PLANTA BAJA PROTAGONISTA */
+    .primary-plan-card {
+      background: var(--sub-panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .card-header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      font-size: 0.88rem;
+      color: var(--text);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .card-sub {
+      font-size: 0.76rem;
+      color: var(--muted);
+      text-transform: none;
+      letter-spacing: normal;
+      font-weight: 400;
+    }
+
+    .plan-stage {
+      position: relative;
+      width: 100%;
+      padding: 10px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: auto;
+    }
+
+    .grid-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 760px;
+      aspect-ratio: 8 / 3;
+      min-height: 150px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--grid-bg);
+      border-radius: 6px;
+      border: 2px solid var(--grid-border);
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cell {
+      width: 100%;
+      height: 100%;
+      min-width: 24px;
+      min-height: 24px;
+      border-radius: 0;
+      position: relative;
+      transition: background-color 0.25s ease;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.28);
+    }
+
+    /* Indicador de salida verde variable al exterior en PB */
+    .cell.green-exit-badge::after {
+      content: "";
+      position: absolute;
+      inset: 14%;
+      border: 2px dashed rgba(5, 46, 22, 0.72);
+      border-radius: 4px;
+      pointer-events: none;
+    }
+
+    .cell.merged-flash {
+      animation: pulse 0.45s ease;
+      z-index: 1;
+    }
+
+    @keyframes pulse {
+      0% { filter: brightness(1); }
+      50% { filter: brightness(1.22); }
+      100% { filter: brightness(1); }
+    }
+
+    /* Líneas de traza de corte arquitectónico sobre la planta */
+    .cut-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .cut-line-h {
+      position: absolute;
+      left: 6px;
+      right: 6px;
+      height: 0;
+      border-top: 2px dashed rgba(255, 255, 255, 0.95);
+      transition: top 0.25s ease;
+      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.9));
+    }
+
+    .cut-line-h::before,
+    .cut-line-h::after {
+      content: attr(data-label-start);
+      position: absolute;
+      top: -12px;
+      background: #000000;
+      color: #ffffff;
+      border: 1.5px solid #ffffff;
+      font-size: 0.64rem;
+      font-weight: 800;
+      padding: 0 6px;
+      height: 22px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+    }
+
+    .cut-line-h::before { left: -2px; }
+    .cut-line-h::after { content: attr(data-label-end); right: -2px; }
+
+    .cut-line-v {
+      position: absolute;
+      top: 4px;
+      bottom: 4px;
+      width: 0;
+      border-left: 2px dashed rgba(255, 255, 255, 0.95);
+      transition: left 0.25s ease;
+      filter: drop-shadow(1px 0 2px rgba(0, 0, 0, 0.9));
+    }
+
+    .cut-line-v::before,
+    .cut-line-v::after {
+      content: attr(data-label-start);
+      position: absolute;
+      left: -16px;
+      background: #000000;
+      color: #ffffff;
+      border: 1.5px solid #ffffff;
+      font-size: 0.64rem;
+      font-weight: 800;
+      padding: 0 6px;
+      height: 22px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+    }
+
+    .cut-line-v::before { top: -2px; }
+    .cut-line-v::after { content: attr(data-label-end); bottom: -2px; }
+
+    /* 2ª JERARQUÍA: AXONOMÉTRICA */
+    .secondary-axo-card {
+      background: var(--sub-panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 20px;
+    }
+
+    .axo-wrap {
+      width: 100%;
+      background: var(--grid-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .axo-wrap svg {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      max-height: 380px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    /* 3ª JERARQUÍA: CORTES ARQUITECTÓNICOS */
+    .sections-panel {
+      display: grid;
+      grid-template-columns: 1.45fr 1fr;
+      gap: 16px;
+      padding: 16px;
+      background: var(--sub-panel);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+
+    .section-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .section-card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .section-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 0.02em;
+    }
+
+    .section-selector {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .section-selector select {
+      padding: 3px 6px;
+      font-size: 0.75rem;
+    }
+
+    .section-svg-wrap {
+      width: 100%;
+      background: var(--grid-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 8px 6px 8px;
+      overflow-x: auto;
+    }
+
+    .section-svg-wrap svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      min-width: 220px;
+    }
+
+    .section-caption {
+      margin-top: 8px;
+      font-size: 0.72rem;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* Sección de gráfico de torta y métricas */
+    .analytics-section {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 20px;
+      align-items: center;
+      padding: 16px;
+      background: var(--sub-panel);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .chart-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .pie-wrapper {
+      position: relative;
+      width: 165px;
+      height: 165px;
+    }
+
+    .pie-wrapper svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+      overflow: visible;
+    }
+
+    .pie-center-label {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      text-align: center;
+    }
+
+    .pie-center-label .total-num {
+      font-size: 1.35rem;
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--text);
+    }
+
+    .pie-center-label .total-sub {
+      font-size: 0.68rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .breakdown {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .breakdown-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .legend-row {
+      display: grid;
+      grid-template-columns: 14px 1fr auto auto;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 10px;
+      background: var(--panel);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-size: 0.84rem;
+    }
+
+    .swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 4px;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    .usage-name {
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .usage-count {
+      font-weight: 700;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .usage-pct {
+      font-size: 0.78rem;
+      color: var(--muted);
+      min-width: 46px;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stats-bar {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    /* NUEVA SECCIÓN: PLANTAS POR NIVEL (PB a Quinto Nivel) */
+    .levels-plans-card {
+      background: var(--sub-panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 20px;
+    }
+
+    .levels-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 18px;
+      margin-bottom: 14px;
+      padding: 8px 12px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .levels-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .legend-sample {
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    .legend-sample.patio-open {
+      background: repeating-linear-gradient(
+        45deg,
+        rgba(34, 197, 94, 0.16),
+        rgba(34, 197, 94, 0.16) 3px,
+        rgba(34, 197, 94, 0.32) 3px,
+        rgba(34, 197, 94, 0.32) 6px
+      );
+      border: 1px solid rgba(34, 197, 94, 0.65);
+    }
+
+    .legend-sample.void-opening {
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 3px,
+        rgba(161, 161, 170, 0.45) 3px,
+        rgba(161, 161, 170, 0.45) 5px
+      );
+      border: 1.5px dashed #a1a1aa;
+    }
+
+    .legend-sample.terrace-setback {
+      background: repeating-linear-gradient(
+        90deg,
+        rgba(250, 204, 21, 0.14),
+        rgba(250, 204, 21, 0.14) 3px,
+        rgba(161, 161, 170, 0.22) 3px,
+        rgba(161, 161, 170, 0.22) 6px
+      );
+      border: 1px dotted #a1a1aa;
+    }
+
+    .levels-grid-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .level-plan-item {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .level-plan-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .level-plan-title {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .level-plan-tag {
+      font-size: 0.7rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .mini-plan-wrapper {
+      width: 100%;
+      aspect-ratio: 8 / 3;
+      border-radius: 5px;
+      overflow: hidden;
+      border: 1.5px solid var(--grid-border);
+      background: var(--grid-bg);
+    }
+
+    .mini-plan-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      width: 100%;
+      height: 100%;
+    }
+
+    .mini-cell {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.35);
+      transition: background-color 0.2s ease;
+    }
+
+    .mini-cell.patio-open {
+      background: repeating-linear-gradient(
+        45deg,
+        rgba(34, 197, 94, 0.14),
+        rgba(34, 197, 94, 0.14) 4px,
+        rgba(34, 197, 94, 0.28) 4px,
+        rgba(34, 197, 94, 0.28) 8px
+      );
+      box-shadow: inset 0 0 0 0.6px rgba(34, 197, 94, 0.45);
+    }
+
+    .mini-cell.void-opening {
+      background: repeating-linear-gradient(
+        -45deg,
+        var(--grid-bg),
+        var(--grid-bg) 3px,
+        rgba(161, 161, 170, 0.36) 3px,
+        rgba(161, 161, 170, 0.36) 5px
+      );
+      box-shadow: inset 0 0 0 1px rgba(161, 161, 170, 0.65);
+    }
+
+    .mini-cell.terrace-setback {
+      background: repeating-linear-gradient(
+        90deg,
+        rgba(250, 204, 21, 0.12),
+        rgba(250, 204, 21, 0.12) 3px,
+        rgba(161, 161, 170, 0.18) 3px,
+        rgba(161, 161, 170, 0.18) 6px
+      );
+      box-shadow: inset 0 0 0 0.8px rgba(161, 161, 170, 0.45);
+    }
+
+    .level-plan-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    /* Ajustes específicos para móvil en vertical */
+    @media (max-width: 740px) {
+      body {
+        padding: 8px;
+        justify-content: flex-start;
+      }
+
+      .container {
+        padding: 12px;
+        border-radius: 12px;
+      }
+
+      header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        margin-bottom: 14px;
+        padding-bottom: 12px;
+      }
+
+      h1 {
+        font-size: 1.05rem;
+      }
+
+      .subtitle {
+        font-size: 0.74rem;
+      }
+
+      .actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .actions button {
+        flex: 1;
+        padding: 9px 8px;
+        font-size: 0.8rem;
+        text-align: center;
+      }
+
+      .controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 10px 12px;
+        margin-bottom: 14px;
+      }
+
+      .control-group {
+        font-size: 0.8rem;
+      }
+
+      .sections-panel {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 12px;
+      }
+
+      .levels-grid-container {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .analytics-section {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        padding: 14px;
+      }
+
+      .pie-wrapper {
+        width: 155px;
+        height: 155px;
+      }
+
+      .legend-row {
+        font-size: 0.8rem;
+        padding: 6px 8px;
+      }
+    }
+  
+
+    /* =========================================================
+       CORRECCIÓN DE TEMA CLARO / OSCURO
+       Los colores de la diagramación ahora respetan las variables
+       definidas en :root y [data-theme="dark"].
+       ========================================================= */
+
+    body,
+    .container {
+      background: var(--bg) !important;
+      color: var(--text) !important;
+    }
+
+    .controls,
+    .control-group,
+    .secondary-axo-card,
+    .primary-plan-card,
+    .levels-plans-card,
+    .analytics-section,
+    .section-card,
+    .level-plan-item,
+    .stats-bar {
+      background: var(--sub-panel) !important;
+      color: var(--text) !important;
+      border-color: var(--border) !important;
+    }
+
+    .axo-wrap,
+    .section-svg-wrap,
+    .levels-legend,
+    .mini-plan-wrapper,
+    .grid {
+      background: var(--grid-bg) !important;
+      border-color: var(--border) !important;
+    }
+
+    select,
+    input:not([type="checkbox"]),
+    textarea {
+      background: var(--panel) !important;
+      color: var(--text) !important;
+      border-color: var(--border) !important;
+    }
+
+    label,
+    .card-header,
+    .card-sub,
+    .level-plan-title,
+    .level-plan-tag,
+    .levels-legend-item,
+    .legend-row,
+    .breakdown-header,
+    .stats-bar,
+    .control-group {
+      color: var(--text) !important;
+    }
+
+    .muted,
+    .subtitle,
+    .level-plan-meta,
+    .card-sub {
+      color: var(--muted) !important;
+    }
+
+    .legend-row,
+    .levels-legend-item,
+    .level-plan-header {
+      border-color: var(--border) !important;
+    }
+
+    .mini-plan-grid,
+    .grid,
+    .section-svg-wrap,
+    .axo-wrap {
+      color: var(--text) !important;
+    }
+
+    button.secondary {
+      background: var(--panel) !important;
+      color: var(--text) !important;
+      border-color: var(--border) !important;
+    }
+
+    body,
+    .container,
+    .controls,
+    .secondary-axo-card,
+    .primary-plan-card,
+    .levels-plans-card,
+    .analytics-section,
+    .section-card,
+    .level-plan-item,
+    .stats-bar,
+    .axo-wrap,
+    .section-svg-wrap {
+      transition: background-color .2s ease, color .2s ease, border-color .2s ease;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <div>
+        <h1>SISTEMA DE MANZANAS COLAVORATIVA</h1>
+        <div class="subtitle">Patio Verde Abierto al Cielo (Dona) · Edificios Solo en Colores · Vanos 1–2 Niveles y Retiro N6</div>
+      </div>
+      <div class="actions">
+        <button id="btnTheme" class="secondary" title="Cambiar tema negro / claro">☀️ Claro</button>
+        <button id="btnGenerate">Generar</button>
+        <button id="btnStep" class="secondary" title="Genera primero sin unificar para ver qué celdas corrige la regla">Paso a paso</button>
+      </div>
+    </header>
+
+    <div class="controls">
+      <div class="control-group">
+        <input type="checkbox" id="allowVariableGreen" checked />
+        <label for="allowVariableGreen">Salidas verdes variables en PB (máx. 2)</label>
+      </div>
+
+      <div class="control-group">
+        <input type="checkbox" id="enableVolumeVoids" checked />
+        <label for="enableVolumeVoids">Vacíos en volúmenes (1 celda simple o 2 doble altura)</label>
+      </div>
+
+      <div class="control-group">
+        <input type="checkbox" id="includeFixedInMerge" />
+        <label for="includeFixedInMerge">Verde fijo unifica vecinos (Verde - X - Verde)</label>
+      </div>
+
+      <div class="control-group">
+        <input type="checkbox" id="iterativeMerge" checked />
+        <label for="iterativeMerge">Consolidación iterativa (0 fragmentación)</label>
+      </div>
+
+      <div class="control-group">
+        <input type="checkbox" id="chartOnlyUpper" />
+        <label for="chartOnlyUpper">Medir torta sobre volumen 3D completo (6 niveles)</label>
+      </div>
+    </div>
+
+    <!-- 1ª JERARQUÍA: PLANTA BAJA PROTAGONISTA -->
+    <div class="primary-plan-card">
+      <div class="card-header">
+        <span>1ª Jerarquía — Planta Baja (Nivel 1)</span>
+        <span class="card-sub">Tocá celdas variables para rotar uso · Verde = Patio abierto al cielo (N1–N6)</span>
+      </div>
+      <div class="plan-stage">
+        <div class="grid-wrapper">
+          <div class="grid" id="grid"></div>
+          <div class="cut-overlay">
+            <div class="cut-line-h" id="cutLineH"></div>
+            <div class="cut-line-v" id="cutLineV"></div>
+          </div>
+        </div>
+      </div>
+      <div class="section-caption" style="margin-top: 12px;">
+        <span>10 verdes fijas · 14 variables (máx. 2 salidas verdes al exterior en PB)</span>
+        <span>Ejes de corte A–A' y B–B'</span>
+      </div>
+    </div>
+
+    <!-- 2ª JERARQUÍA: AXONOMÉTRICA 3D -->
+    <div class="secondary-axo-card">
+      <div class="card-header">
+        <span>2ª Jerarquía — Axonométrica Esquemática</span>
+        <span class="card-sub">Patio verde abierto en toda su altura · Edificios solo en colores · Retiro N6</span>
+      </div>
+      <div class="axo-wrap">
+        <svg id="svgAxo" viewBox="0 0 540 310" preserveAspectRatio="xMidYMid meet"></svg>
+      </div>
+      <div class="section-caption" style="margin-top: 10px;">
+        <span>Crecimiento exclusivamente sobre celdas edificables · Terrazas cerradas en N5</span>
+        <span>Escala N1 a N6</span>
+      </div>
+    </div>
+
+    <!-- 3ª JERARQUÍA: CORTES ARQUITECTÓNICOS -->
+    <div class="sections-panel">
+      <!-- Corte Longitudinal A-A' -->
+      <div class="section-card">
+        <div class="section-card-head">
+          <span class="section-title">3ª Jerarquía — Corte Longitudinal A–A'</span>
+          <div class="section-selector">
+            <label for="longRowSelect">Eje:</label>
+            <select id="longRowSelect">
+              <option value="0">Fila 1 (Borde Norte)</option>
+              <option value="1" selected>Fila 2 (Central)</option>
+              <option value="2">Fila 3 (Borde Sur)</option>
+            </select>
+          </div>
+        </div>
+        <div class="section-svg-wrap">
+          <svg id="svgLongitudinal" viewBox="0 0 440 165" preserveAspectRatio="xMidYMid meet"></svg>
+        </div>
+        <div class="section-caption">
+          <span>Patio central abierto · Vanos de 1 o 2 celdas · Remate N6 retraído</span>
+          <span>N2 a N6 predominio Vivienda</span>
+        </div>
+      </div>
+
+      <!-- Corte Transversal B-B' -->
+      <div class="section-card">
+        <div class="section-card-head">
+          <span class="section-title">3ª Jerarquía — Corte Transversal B–B'</span>
+          <div class="section-selector">
+            <label for="transColSelect">Eje:</label>
+            <select id="transColSelect">
+              <option value="0">Columna 1 (Borde Oeste)</option>
+              <option value="1">Columna 2</option>
+              <option value="2" selected>Columna 3</option>
+              <option value="3">Columna 4</option>
+              <option value="4">Columna 5</option>
+              <option value="5">Columna 6</option>
+              <option value="6">Columna 7 (Parque Este)</option>
+              <option value="7">Columna 8 (Borde Este)</option>
+            </select>
+          </div>
+        </div>
+        <div class="section-svg-wrap">
+          <svg id="svgTransversal" viewBox="0 0 240 165" preserveAspectRatio="xMidYMid meet"></svg>
+        </div>
+        <div class="section-caption">
+          <span>3 módulos transversales</span>
+          <span>Retiro exterior en N6</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- NUEVA SECCIÓN: PLANTAS ARQUITECTÓNICAS POR NIVEL -->
+    <div class="levels-plans-card">
+      <div class="card-header">
+        <span>4ª Jerarquía — Desarrollo de Plantas por Nivel</span>
+        <span class="card-sub">Planta Baja a Quinto Nivel · Sincronizado en tiempo real</span>
+      </div>
+
+      <div class="levels-legend">
+        <div class="levels-legend-item">
+          <span class="legend-sample patio-open"></span>
+          <span>Vacío patio verde (abierto al cielo)</span>
+        </div>
+        <div class="levels-legend-item">
+          <span class="legend-sample void-opening"></span>
+          <span>Vano / vacío interior en edificio (1 o 2 niveles)</span>
+        </div>
+        <div class="levels-legend-item">
+          <span class="legend-sample terrace-setback"></span>
+          <span>Terraza descubierta por retiro (Quinto Nivel)</span>
+        </div>
+      </div>
+
+      <div class="levels-grid-container" id="levelsPlansContainer"></div>
+    </div>
+
+    <!-- GRÁFICO DE TORTA Y BALANCE -->
+    <div class="analytics-section">
+      <div class="chart-box">
+        <div class="pie-wrapper">
+          <svg id="pieChart" viewBox="0 0 100 100"></svg>
+          <div class="pie-center-label">
+            <span class="total-num" id="pieTotal">24</span>
+            <span class="total-sub" id="pieSub">celdas</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="breakdown">
+        <div class="breakdown-header">
+          <span>Distribución de usos</span>
+          <span id="chartScopeLabel">Planta Baja (24 celdas)</span>
+        </div>
+        <div id="legend"></div>
+      </div>
+    </div>
+
+    <div class="stats-bar">
+      <span id="stats">Listo para generar</span>
+      <span>Sistema colaborativo sincronizado</span>
+    </div>
+  </div>
+
+  <script>
+    const ROWS = 3;
+    const COLS = 8;
+    const MAX_LEVELS = 6;
+
+    const COLORS = {
+      green:  { id: 'green',  name: 'Verde (Patio abierto al cielo)', hex: '#22c55e' },
+      yellow: { id: 'yellow', name: 'Vivienda',                       hex: '#facc15' },
+      red:    { id: 'red',    name: 'Comercio',                       hex: '#ef4444' },
+      violet: { id: 'violet', name: 'Equipamiento público',           hex: '#8b5cf6' },
+      blue:   { id: 'blue',   name: 'Vivienda flexible',              hex: '#3b82f6' }
+    };
+
+    const BUILT_PALETTE = [
+      COLORS.yellow,
+      COLORS.red,
+      COLORS.violet,
+      COLORS.blue
+    ];
+
+    let gridState = [];
+    let pendingRawGrid = null;
+
+    // Control de Tema Negro Puro / Claro
+    const btnTheme = document.getElementById('btnTheme');
+    let currentTheme = 'dark';
+
+    function setTheme(theme) {
+      currentTheme = theme;
+      document.documentElement.setAttribute('data-theme', theme);
+      btnTheme.textContent = theme === 'dark' ? '☀️ Claro' : '🌑 Negro';
+      try {
+        localStorage.setItem('manzanas_theme', theme);
+      } catch (e) {}
+      if (gridState.length > 0) {
+        renderAxonometric(gridState);
+        updateSectionsAndMarkers();
+        renderPieChart(computeCounts(gridState));
+      }
+    }
+
+    let savedTheme = 'dark';
+    try {
+      savedTheme = localStorage.getItem('manzanas_theme') || 'dark';
+    } catch (e) {}
+    setTheme(savedTheme);
+
+    btnTheme.addEventListener('click', () => {
+      setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+    });
+
+    /**
+     * Define las 10 celdas verdes fijas en Planta Baja:
+     * - Columnas 6 y 7 completas (c >= 6 -> 6 celdas)
+     * - Patio central en fila 1, columnas 1 a 4 (r === 1 && c >= 1 && c <= 4 -> 4 celdas)
+     */
+    function isFixedGreen(r, c) {
+      if (c >= 6) return true;
+      if (r === 1 && c >= 1 && c <= 4) return true;
+      return false;
+    }
+
+    /**
+     * Determina si una celda pertenece al borde exterior de la manzana.
+     */
+    function isOuterEdge(r, c) {
+      return r === 0 || r === ROWS - 1 || c === 0 || c === COLS - 1;
+    }
+
+    /**
+     * Cuenta cuántas celdas verdes variables activas hay en la grilla actual.
+     */
+    function countVariableGreens(grid) {
+      let count = 0;
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          if (!grid[r][c].fixed && grid[r][c].color.id === 'green') {
+            count++;
+          }
+        }
+      }
+      return count;
+    }
+
+    /**
+     * Construye la pila vertical (N1..N6):
+     * - Si PB (Nivel 1) es Verde, el espacio queda 100% abierto al cielo en toda su altura
+     *   (stack = [], formando un patio abierto en forma de "dona").
+     * - Los edificios crecen EXCLUSIVAMENTE en las celdas con colores construibles.
+     * - Retiro perimetral en Nivel 6 (zIdx === 5): las celdas ubicadas en los bordes
+     *   exteriores de la manzana se retraen/eliminan en el Nivel 6, generando terrazas en N5.
+     */
+    function buildVerticalStack(pbColor, r, c) {
+      if (pbColor.id === 'green') {
+        return [];
+      }
+
+      const maxBuiltLevels = isOuterEdge(r, c) ? MAX_LEVELS - 1 : MAX_LEVELS;
+      const levels = [pbColor];
+
+      for (let lvl = 2; lvl <= maxBuiltLevels; lvl++) {
+        if (lvl === 2 && pbColor.id === 'violet' && Math.random() < 0.55) {
+          levels.push(COLORS.violet);
+        } else if (lvl === 2 && pbColor.id === 'blue' && Math.random() < 0.45) {
+          levels.push(COLORS.blue);
+        } else {
+          levels.push(Math.random() < 0.85 ? COLORS.yellow : COLORS.blue);
+        }
+      }
+
+      return levels;
+    }
+
+    /**
+     * Genera vacíos interiores estrictamente de 1 celda (simple) o 2 celdas verticales
+     * (doble altura) exclusivamente dentro de las celdas construidas (con color),
+     * manteniendo libre el patio verde central y respetando la cubierta final.
+     */
+    function applyVolumeVoids(grid) {
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          grid[r][c].stack = buildVerticalStack(grid[r][c].color, r, c);
+        }
+      }
+
+      const enableVoids = document.getElementById('enableVolumeVoids').checked;
+      if (!enableVoids) return;
+
+      // Patrones de vanos en niveles intermedios (nunca en PB ni en la cubierta superior)
+      const voidPatterns = [
+        { cells: [[0, 2], [0, 3]], zStart: 2, height: 2 },
+        { cells: [[2, 2], [2, 3]], zStart: 2, height: 2 },
+        { cells: [[0, 4]],         zStart: 2, height: 1 },
+        { cells: [[2, 4]],         zStart: 2, height: 2 },
+        { cells: [[1, 0]],         zStart: 2, height: 2 },
+        { cells: [[1, 5]],         zStart: 2, height: 1 }
+      ];
+
+      const shuffled = [...voidPatterns].sort(() => Math.random() - 0.5);
+      const selected = shuffled.slice(0, 2);
+
+      selected.forEach(pattern => {
+        pattern.cells.forEach(([r, c]) => {
+          const cell = grid[r][c];
+          if (cell.color.id === 'green' || cell.stack.length < 4) return;
+          // Garantizar que quede al menos 1 nivel sólido encima del vano (cubierta puenteada)
+          const maxVoidIdx = cell.stack.length - 2;
+          const zEnd = Math.min(maxVoidIdx, pattern.zStart + pattern.height - 1);
+          for (let z = pattern.zStart; z <= zEnd; z++) {
+            cell.stack[z] = null;
+          }
+        });
+      });
+    }
+
+    /**
+     * Crea una grilla inicial de 3x8 con las 10 celdas verdes fijas,
+     * hasta 2 salidas verdes variables hacia los bordes Norte/Sur del patio central
+     * y usos construibles aleatorios en el resto de la dona edificable.
+     */
+    function createRandomGrid() {
+      const allowVarGreen = document.getElementById('allowVariableGreen').checked;
+      const grid = [];
+
+      for (let r = 0; r < ROWS; r++) {
+        const row = [];
+        for (let c = 0; c < COLS; c++) {
+          if (isFixedGreen(r, c)) {
+            row.push({
+              color: COLORS.green,
+              fixed: true,
+              merged: false,
+              stack: []
+            });
+          } else {
+            const randomColor = BUILT_PALETTE[Math.floor(Math.random() * BUILT_PALETTE.length)];
+            row.push({
+              color: randomColor,
+              fixed: false,
+              merged: false,
+              stack: []
+            });
+          }
+        }
+        grid.push(row);
+      }
+
+      // Asignar hasta 2 salidas verdes variables conectando el patio central con el exterior
+      if (allowVarGreen) {
+        const exitCandidates = [
+          [0, 1], [0, 2], [0, 3], [0, 4],
+          [2, 1], [2, 2], [2, 3], [2, 4]
+        ];
+        const shuffledExits = exitCandidates.sort(() => Math.random() - 0.5);
+        const exitCount = 1 + Math.floor(Math.random() * 2); // 1 o 2 salidas verdes
+        for (let i = 0; i < exitCount; i++) {
+          const [er, ec] = shuffledExits[i];
+          grid[er][ec].color = COLORS.green;
+        }
+      }
+
+      applyVolumeVoids(grid);
+      return grid;
+    }
+
+    /**
+     * Consolida celdas aisladas entre vecinos iguales (A - B - A -> A - A - A),
+     * respetando el límite máximo de 2 verdes variables y aplicando los vanos en altura.
+     */
+    function consolidateGrid(grid) {
+      const includeFixed = document.getElementById('includeFixedInMerge').checked;
+      const iterative = document.getElementById('iterativeMerge').checked;
+      const maxVarGreens = document.getElementById('allowVariableGreen').checked ? 2 : 0;
+
+      let totalChanges = 0;
+      let passes = 0;
+      let changedInPass = true;
+
+      while (changedInPass) {
+        changedInPass = false;
+        passes++;
+        const nextColors = grid.map(row => row.map(cell => cell.color));
+
+        for (let r = 0; r < ROWS; r++) {
+          for (let c = 0; c < COLS; c++) {
+            const current = grid[r][c];
+            if (current.fixed) continue;
+
+            let newColor = null;
+
+            if (c > 0 && c < COLS - 1) {
+              const left = grid[r][c - 1];
+              const right = grid[r][c + 1];
+              const validEndpoints = includeFixed || (!left.fixed && !right.fixed);
+              if (validEndpoints && left.color.id === right.color.id && current.color.id !== left.color.id) {
+                newColor = left.color;
+              }
+            }
+
+            if (!newColor && r > 0 && r < ROWS - 1) {
+              const top = grid[r - 1][c];
+              const bottom = grid[r + 1][c];
+              const validEndpoints = includeFixed || (!top.fixed && !bottom.fixed);
+              if (validEndpoints && top.color.id === bottom.color.id && current.color.id !== top.color.id) {
+                newColor = top.color;
+              }
+            }
+
+            if (newColor) {
+              if (newColor.id === 'green') {
+                const simulatedVarGreens = countVariableGreens(grid) + (current.color.id !== 'green' ? 1 : 0);
+                if (simulatedVarGreens > maxVarGreens) {
+                  continue;
+                }
+              }
+              nextColors[r][c] = newColor;
+              current.merged = true;
+              changedInPass = true;
+              totalChanges++;
+            }
+          }
+        }
+
+        for (let r = 0; r < ROWS; r++) {
+          for (let c = 0; c < COLS; c++) {
+            const cell = grid[r][c];
+            if (cell.color.id !== nextColors[r][c].id) {
+              cell.color = nextColors[r][c];
+            }
+          }
+        }
+
+        if (!iterative || passes > 20) break;
+      }
+
+      // Garantizar tope estricto de verdes variables si la opción fue desactivada o excedida
+      let currentVar = 0;
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          const cell = grid[r][c];
+          if (!cell.fixed && cell.color.id === 'green') {
+            currentVar++;
+            if (currentVar > maxVarGreens) {
+              cell.color = BUILT_PALETTE[0];
+            }
+          }
+        }
+      }
+
+      applyVolumeVoids(grid);
+      return { grid, totalChanges, passes };
+    }
+
+    /**
+     * Renderiza la Axonométrica 3D en SVG:
+     * - Patio verde completamente abierto al cielo (N1 a N6) en forma de dona.
+     * - Edificios exclusivamente en celdas de color, con retiro perimetral en Nivel 6.
+     * - Orden de pintor estricto (de atrás hacia adelante y de abajo hacia arriba),
+     *   dibujando SIEMPRE las dos caras laterales y la tapa superior (top) de cada
+     *   módulo sólido para evitar cualquier transparencia en retranqueos o vanos.
+     */
+    function renderAxonometric(grid) {
+      const svg = document.getElementById('svgAxo');
+      svg.innerHTML = '';
+      const ns = 'http://www.w3.org/2000/svg';
+
+      const tileW = 24;
+      const tileH = 13.5;
+      const levelH = 14;
+      const originX = 185;
+      const originY = 172;
+
+      function isoPoint(gx, gy, gz) {
+        const sx = originX + (gx - gy) * tileW;
+        const sy = originY + (gx + gy) * tileH - gz * levelH;
+        return [sx, sy];
+      }
+
+      function polyPoints(pts) {
+        return pts.map(p => `${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' ');
+      }
+
+      function shadeHex(hex, factor) {
+        const num = parseInt(hex.slice(1), 16);
+        const r = Math.min(255, Math.max(0, Math.round(((num >> 16) & 255) * factor)));
+        const g = Math.min(255, Math.max(0, Math.round(((num >> 8) & 255) * factor)));
+        const b = Math.min(255, Math.max(0, Math.round((num & 255) * factor)));
+        return `rgb(${r},${g},${b})`;
+      }
+
+      const baseThickness = 8;
+      const p03 = isoPoint(0, ROWS, 0);
+      const p83 = isoPoint(COLS, ROWS, 0);
+      const p80 = isoPoint(COLS, 0, 0);
+
+      const p03b = [p03[0], p03[1] + baseThickness];
+      const p83b = [p83[0], p83[1] + baseThickness];
+      const p80b = [p80[0], p80[1] + baseThickness];
+
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      const baseSideCol = isLight ? '#d4d4d8' : '#18181b';
+      const baseFrontCol = isLight ? '#a1a1aa' : '#09090b';
+      const strokeCol = isLight ? 'rgba(0, 0, 0, 0.28)' : 'rgba(255, 255, 255, 0.28)';
+
+      const baseFrontLeft = document.createElementNS(ns, 'polygon');
+      baseFrontLeft.setAttribute('points', polyPoints([p03, p83, p83b, p03b]));
+      baseFrontLeft.setAttribute('fill', baseSideCol);
+      baseFrontLeft.setAttribute('stroke', isLight ? '#a1a1aa' : '#27272a');
+      baseFrontLeft.setAttribute('stroke-width', '0.8');
+      svg.appendChild(baseFrontLeft);
+
+      const baseFrontRight = document.createElementNS(ns, 'polygon');
+      baseFrontRight.setAttribute('points', polyPoints([p83, p80, p80b, p83b]));
+      baseFrontRight.setAttribute('fill', baseFrontCol);
+      baseFrontRight.setAttribute('stroke', isLight ? '#a1a1aa' : '#27272a');
+      baseFrontRight.setAttribute('stroke-width', '0.8');
+      svg.appendChild(baseFrontRight);
+
+      for (let sum = 0; sum <= ROWS + COLS - 2; sum++) {
+        for (let r = 0; r < ROWS; r++) {
+          const c = sum - r;
+          if (c < 0 || c >= COLS) continue;
+
+          const cell = grid[r][c];
+          const gx = c;
+          const gy = r;
+
+          // Celdas verdes: patio abierto al cielo en toda su altura (sin volumen arriba)
+          if (cell.color.id === 'green' || cell.stack.length === 0) {
+            const topPts = [
+              isoPoint(gx, gy, 0),
+              isoPoint(gx + 1, gy, 0),
+              isoPoint(gx + 1, gy + 1, 0),
+              isoPoint(gx, gy + 1, 0)
+            ];
+            const tile = document.createElementNS(ns, 'polygon');
+            tile.setAttribute('points', polyPoints(topPts));
+            tile.setAttribute('fill', COLORS.green.hex);
+            tile.setAttribute('stroke', 'rgba(5, 46, 22, 0.45)');
+            tile.setAttribute('stroke-width', '0.5');
+            svg.appendChild(tile);
+            continue;
+          }
+
+          // Celdas edificadas: N6 se prolonga en los bordes con un retiro
+          // medido únicamente desde las caras exteriores; las caras interiores
+          // conservan su alineación con los niveles inferiores.
+          const levels = [...cell.stack];
+          if (isOuterEdge(r, c) && levels.length === MAX_LEVELS - 1) {
+            levels.push(levels[levels.length - 1] || cell.color);
+          }
+
+          levels.forEach((lvlColor, zIdx) => {
+            if (!lvlColor) return;
+
+            const z0 = zIdx;
+            const z1 = zIdx + 1;
+            const isTopRetreat = zIdx === MAX_LEVELS - 1;
+            const setback = isTopRetreat ? 0.18 : 0;
+
+            // El retiro afecta solo el/los lado(s) que dan al exterior.
+            // En esquinas se retraen ambos lados exteriores; nunca el patio interior.
+            const x0 = gx + (isTopRetreat && c === 0 ? setback : 0);
+            const x1 = gx + 1 - (isTopRetreat && c === COLS - 1 ? setback : 0);
+            const y0 = gy + (isTopRetreat && r === 0 ? setback : 0);
+            const y1 = gy + 1 - (isTopRetreat && r === ROWS - 1 ? setback : 0);
+
+            const cTop   = shadeHex(lvlColor.hex, 1.04);
+            const cLeft  = shadeHex(lvlColor.hex, 0.84);
+            const cRight = shadeHex(lvlColor.hex, 0.68);
+
+            // Cara frontal izquierda
+            const leftPts = [
+              isoPoint(x0, y1, z0),
+              isoPoint(x1, y1, z0),
+              isoPoint(x1, y1, z1),
+              isoPoint(x0, y1, z1)
+            ];
+            const polyL = document.createElementNS(ns, 'polygon');
+            polyL.setAttribute('points', polyPoints(leftPts));
+            polyL.setAttribute('fill', cLeft);
+            polyL.setAttribute('stroke', strokeCol);
+            polyL.setAttribute('stroke-width', '0.55');
+            svg.appendChild(polyL);
+
+            // Cara frontal derecha
+            const rightPts = [
+              isoPoint(x1, y0, z0),
+              isoPoint(x1, y1, z0),
+              isoPoint(x1, y1, z1),
+              isoPoint(x1, y0, z1)
+            ];
+            const polyR = document.createElementNS(ns, 'polygon');
+            polyR.setAttribute('points', polyPoints(rightPts));
+            polyR.setAttribute('fill', cRight);
+            polyR.setAttribute('stroke', strokeCol);
+            polyR.setAttribute('stroke-width', '0.55');
+            svg.appendChild(polyR);
+
+            // Cara superior: la huella retraída deja visible la terraza de N5.
+            const topPts = [
+              isoPoint(x0, y0, z1),
+              isoPoint(x1, y0, z1),
+              isoPoint(x1, y1, z1),
+              isoPoint(x0, y1, z1)
+            ];
+            const polyT = document.createElementNS(ns, 'polygon');
+            polyT.setAttribute('points', polyPoints(topPts));
+            polyT.setAttribute('fill', cTop);
+            polyT.setAttribute('stroke', isLight ? 'rgba(0, 0, 0, 0.35)' : 'rgba(255, 255, 255, 0.42)');
+            polyT.setAttribute('stroke-width', '0.6');
+            svg.appendChild(polyT);
+          });
+        }
+      }
+
+      // Escala lateral N1 a N6
+      const scaleX = 500;
+      const scaleBaseY = 255;
+      const textCol = isLight ? '#3f3f46' : '#a1a1aa';
+
+      for (let lvl = 0; lvl <= MAX_LEVELS; lvl++) {
+        const y = scaleBaseY - lvl * levelH;
+        const tick = document.createElementNS(ns, 'line');
+        tick.setAttribute('x1', scaleX - 5);
+        tick.setAttribute('x2', scaleX);
+        tick.setAttribute('y1', y);
+        tick.setAttribute('y2', y);
+        tick.setAttribute('stroke', textCol);
+        tick.setAttribute('stroke-width', '1');
+        svg.appendChild(tick);
+
+        if (lvl > 0) {
+          const lbl = document.createElementNS(ns, 'text');
+          lbl.setAttribute('x', scaleX + 4);
+          lbl.setAttribute('y', y + 3);
+          lbl.setAttribute('fill', textCol);
+          lbl.setAttribute('font-size', '8.5');
+          lbl.setAttribute('font-weight', '600');
+          lbl.textContent = `N${lvl}`;
+          svg.appendChild(lbl);
+        }
+      }
+      const scaleAxis = document.createElementNS(ns, 'line');
+      scaleAxis.setAttribute('x1', scaleX);
+      scaleAxis.setAttribute('x2', scaleX);
+      scaleAxis.setAttribute('y1', scaleBaseY);
+      scaleAxis.setAttribute('y2', scaleBaseY - MAX_LEVELS * levelH);
+      scaleAxis.setAttribute('stroke', textCol);
+      scaleAxis.setAttribute('stroke-width', '1');
+      svg.appendChild(scaleAxis);
+    }
+
+    /**
+     * Dibuja los cortes-vista arquitectónicos A–A' y B–B':
+     * 1. Primero proyecta en segundo plano (vista detrás del corte) las filas/columnas
+     *    posteriores según la dirección de mirada, con opacidad atmosférica y líneas finas,
+     *    revelando los volúmenes detrás del patio central verde y a través de los vanos.
+     * 2. Luego dibuja en primer plano los volúmenes efectivamente cortados con color pleno
+     *    y contorno grueso de sección.
+     */
+    function drawArchitecturalSection(svgEl, cellsSlice, behindSlices, viewW, viewH, labelStart, labelEnd) {
+      svgEl.innerHTML = '';
+
+      const groundY = viewH - 22;
+      const marginX = 32;
+      const usableW = viewW - marginX * 2;
+      const n = cellsSlice.length;
+      const cellW = usableW / n;
+      const levelH = 19;
+
+      const ns = 'http://www.w3.org/2000/svg';
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      const guideCol = isLight ? '#d4d4d8' : '#27272a';
+      const topRoofCol = isLight ? '#09090b' : '#fafafa';
+      const earthCol = isLight ? '#e4e4e7' : '#18181b';
+      const fogFill = isLight ? 'rgba(244, 244, 245, 0.42)' : 'rgba(0, 0, 0, 0.46)';
+      const elevEdgeCol = isLight ? 'rgba(24, 24, 27, 0.45)' : 'rgba(244, 244, 245, 0.42)';
+
+      for (let lvl = 1; lvl <= MAX_LEVELS; lvl++) {
+        const y = groundY - lvl * levelH;
+        const guide = document.createElementNS(ns, 'line');
+        guide.setAttribute('x1', marginX - 6);
+        guide.setAttribute('x2', viewW - marginX + 6);
+        guide.setAttribute('y1', y);
+        guide.setAttribute('y2', y);
+        guide.setAttribute('stroke', lvl === MAX_LEVELS ? (isLight ? '#a1a1aa' : '#3f3f46') : guideCol);
+        guide.setAttribute('stroke-width', '1');
+        guide.setAttribute('stroke-dasharray', '3 3');
+        svgEl.appendChild(guide);
+      }
+
+      // CAPA 1: VOLÚMENES EN VISTA (detrás del plano de corte, de más lejano a más cercano)
+      if (Array.isArray(behindSlices) && behindSlices.length > 0) {
+        const orderedBehind = [...behindSlices].reverse();
+        const totalDepth = orderedBehind.length;
+
+        orderedBehind.forEach((bgSlice, depthIdx) => {
+          const distFromBack = depthIdx + 1;
+          const depthOpacity = totalDepth === 1 ? 0.44 : (0.30 + (distFromBack / totalDepth) * 0.20);
+          const bgGroup = document.createElementNS(ns, 'g');
+          bgGroup.setAttribute('opacity', depthOpacity.toFixed(2));
+
+          bgSlice.forEach((cell, i) => {
+            const baseX = marginX + i * cellW;
+            const levels = cell.stack;
+
+            if (cell.color.id === 'green' || !levels || levels.length === 0) {
+              const turfH = 4;
+              const turf = document.createElementNS(ns, 'rect');
+              turf.setAttribute('x', baseX);
+              turf.setAttribute('y', groundY - turfH);
+              turf.setAttribute('width', cellW);
+              turf.setAttribute('height', turfH);
+              turf.setAttribute('fill', COLORS.green.hex);
+              bgGroup.appendChild(turf);
+              return;
+            }
+
+            const prevLevels = i > 0 ? bgSlice[i - 1].stack : [];
+            const nextLevels = i < n - 1 ? bgSlice[i + 1].stack : [];
+
+            levels.forEach((lvlColor, zIdx) => {
+              if (!lvlColor) return;
+              const yTop = groundY - (zIdx + 1) * levelH;
+              const yBot = groundY - zIdx * levelH;
+
+              const rect = document.createElementNS(ns, 'rect');
+              rect.setAttribute('x', baseX);
+              rect.setAttribute('y', yTop);
+              rect.setAttribute('width', cellW);
+              rect.setAttribute('height', levelH);
+              rect.setAttribute('fill', lvlColor.hex);
+              bgGroup.appendChild(rect);
+
+              // Velo atmosférico sutil para diferenciar vista de corte
+              const haze = document.createElementNS(ns, 'rect');
+              haze.setAttribute('x', baseX);
+              haze.setAttribute('y', yTop);
+              haze.setAttribute('width', cellW);
+              haze.setAttribute('height', levelH);
+              haze.setAttribute('fill', fogFill);
+              bgGroup.appendChild(haze);
+
+              // Línea horizontal de entrepiso en fachada vista
+              if (zIdx > 0 && levels[zIdx - 1]) {
+                const slab = document.createElementNS(ns, 'line');
+                slab.setAttribute('x1', baseX);
+                slab.setAttribute('x2', baseX + cellW);
+                slab.setAttribute('y1', yBot);
+                slab.setAttribute('y2', yBot);
+                slab.setAttribute('stroke', elevEdgeCol);
+                slab.setAttribute('stroke-width', '0.6');
+                bgGroup.appendChild(slab);
+              }
+
+              // Aristas finas de silueta exterior en vista (0.85px)
+              const hasSolidAbove = (zIdx < levels.length - 1) && Boolean(levels[zIdx + 1]);
+              if (!hasSolidAbove) {
+                const roof = document.createElementNS(ns, 'line');
+                roof.setAttribute('x1', baseX);
+                roof.setAttribute('x2', baseX + cellW);
+                roof.setAttribute('y1', yTop);
+                roof.setAttribute('y2', yTop);
+                roof.setAttribute('stroke', elevEdgeCol);
+                roof.setAttribute('stroke-width', '0.9');
+                bgGroup.appendChild(roof);
+              }
+
+              if (zIdx > 0 && !levels[zIdx - 1]) {
+                const soffit = document.createElementNS(ns, 'line');
+                soffit.setAttribute('x1', baseX);
+                soffit.setAttribute('x2', baseX + cellW);
+                soffit.setAttribute('y1', yBot);
+                soffit.setAttribute('y2', yBot);
+                soffit.setAttribute('stroke', elevEdgeCol);
+                soffit.setAttribute('stroke-width', '0.9');
+                bgGroup.appendChild(soffit);
+              }
+
+              const hasLeftSolid = Boolean(prevLevels && prevLevels[zIdx]);
+              if (!hasLeftSolid) {
+                const wallL = document.createElementNS(ns, 'line');
+                wallL.setAttribute('x1', baseX);
+                wallL.setAttribute('x2', baseX);
+                wallL.setAttribute('y1', yTop);
+                wallL.setAttribute('y2', yBot);
+                wallL.setAttribute('stroke', elevEdgeCol);
+                wallL.setAttribute('stroke-width', '0.85');
+                bgGroup.appendChild(wallL);
+              }
+
+              const hasRightSolid = Boolean(nextLevels && nextLevels[zIdx]);
+              if (!hasRightSolid) {
+                const wallR = document.createElementNS(ns, 'line');
+                wallR.setAttribute('x1', baseX + cellW);
+                wallR.setAttribute('x2', baseX + cellW);
+                wallR.setAttribute('y1', yTop);
+                wallR.setAttribute('y2', yBot);
+                wallR.setAttribute('stroke', elevEdgeCol);
+                wallR.setAttribute('stroke-width', '0.85');
+                bgGroup.appendChild(wallR);
+              }
+            });
+          });
+
+          svgEl.appendChild(bgGroup);
+        });
+      }
+
+      // CAPA 2: TERRENO Y VOLÚMENES CORTADOS EN PRIMER PLANO (100% opacos + contorno grueso)
+      const earth = document.createElementNS(ns, 'rect');
+      earth.setAttribute('x', marginX - 10);
+      earth.setAttribute('y', groundY);
+      earth.setAttribute('width', usableW + 20);
+      earth.setAttribute('height', '13');
+      earth.setAttribute('fill', earthCol);
+      svgEl.appendChild(earth);
+
+      // Rellenos de módulos cortados
+      cellsSlice.forEach((cell, i) => {
+        const baseX = marginX + i * cellW;
+        const levels = cell.stack;
+
+        if (cell.color.id === 'green' || levels.length === 0) {
+          const turfH = 6;
+          const turf = document.createElementNS(ns, 'rect');
+          turf.setAttribute('x', baseX);
+          turf.setAttribute('y', groundY - turfH);
+          turf.setAttribute('width', cellW);
+          turf.setAttribute('height', turfH);
+          turf.setAttribute('fill', COLORS.green.hex);
+          svgEl.appendChild(turf);
+          return;
+        }
+
+        levels.forEach((lvlColor, zIdx) => {
+          if (!lvlColor) return; // Vano interior abierto (deja ver los volúmenes de atrás)
+          const y = groundY - (zIdx + 1) * levelH;
+
+          const rect = document.createElementNS(ns, 'rect');
+          rect.setAttribute('x', baseX);
+          rect.setAttribute('y', y);
+          rect.setAttribute('width', cellW);
+          rect.setAttribute('height', levelH);
+          rect.setAttribute('fill', lvlColor.hex);
+          svgEl.appendChild(rect);
+
+          if (zIdx > 0 && levels[zIdx - 1]) {
+            const slab = document.createElementNS(ns, 'line');
+            slab.setAttribute('x1', baseX);
+            slab.setAttribute('x2', baseX + cellW);
+            slab.setAttribute('y1', y + levelH);
+            slab.setAttribute('y2', y + levelH);
+            slab.setAttribute('stroke', 'rgba(0, 0, 0, 0.52)');
+            slab.setAttribute('stroke-width', '1.4');
+            svgEl.appendChild(slab);
+          }
+        });
+      });
+
+      // Contornos arquitectónicos gruesos alrededor de bloques cortados y vanos
+      cellsSlice.forEach((cell, i) => {
+        const baseX = marginX + i * cellW;
+        const levels = cell.stack;
+        if (!levels || levels.length === 0) return;
+
+        const prevLevels = i > 0 ? cellsSlice[i - 1].stack : [];
+        const nextLevels = i < n - 1 ? cellsSlice[i + 1].stack : [];
+
+        levels.forEach((lvlColor, zIdx) => {
+          if (!lvlColor) return;
+
+          const yTop = groundY - (zIdx + 1) * levelH;
+          const yBot = groundY - zIdx * levelH;
+
+          // Borde superior (cubierta o piso de terraza retranqueada)
+          const hasSolidAbove = (zIdx < levels.length - 1) && Boolean(levels[zIdx + 1]);
+          if (!hasSolidAbove) {
+            const roof = document.createElementNS(ns, 'line');
+            roof.setAttribute('x1', baseX);
+            roof.setAttribute('x2', baseX + cellW);
+            roof.setAttribute('y1', yTop);
+            roof.setAttribute('y2', yTop);
+            roof.setAttribute('stroke', topRoofCol);
+            roof.setAttribute('stroke-width', '2.2');
+            svgEl.appendChild(roof);
+          }
+
+          // Borde inferior (dintel de vano interior)
+          if (zIdx > 0 && !levels[zIdx - 1]) {
+            const soffit = document.createElementNS(ns, 'line');
+            soffit.setAttribute('x1', baseX);
+            soffit.setAttribute('x2', baseX + cellW);
+            soffit.setAttribute('y1', yBot);
+            soffit.setAttribute('y2', yBot);
+            soffit.setAttribute('stroke', topRoofCol);
+            soffit.setAttribute('stroke-width', '2.2');
+            svgEl.appendChild(soffit);
+          }
+
+          // Muro izquierdo (fachada, terraza retranqueada o jamba de vano)
+          const hasLeftSolid = Boolean(prevLevels && prevLevels[zIdx]);
+          if (!hasLeftSolid) {
+            const wallL = document.createElementNS(ns, 'line');
+            wallL.setAttribute('x1', baseX);
+            wallL.setAttribute('x2', baseX);
+            wallL.setAttribute('y1', yTop);
+            wallL.setAttribute('y2', yBot);
+            wallL.setAttribute('stroke', topRoofCol);
+            wallL.setAttribute('stroke-width', '2.1');
+            svgEl.appendChild(wallL);
+          }
+
+          // Muro derecho (fachada, terraza retranqueada o jamba de vano)
+          const hasRightSolid = Boolean(nextLevels && nextLevels[zIdx]);
+          if (!hasRightSolid) {
+            const wallR = document.createElementNS(ns, 'line');
+            wallR.setAttribute('x1', baseX + cellW);
+            wallR.setAttribute('x2', baseX + cellW);
+            wallR.setAttribute('y1', yTop);
+            wallR.setAttribute('y2', yBot);
+            wallR.setAttribute('stroke', topRoofCol);
+            wallR.setAttribute('stroke-width', '2.1');
+            svgEl.appendChild(wallR);
+          }
+        });
+      });
+
+      const groundLine = document.createElementNS(ns, 'line');
+      groundLine.setAttribute('x1', marginX - 12);
+      groundLine.setAttribute('x2', viewW - marginX + 12);
+      groundLine.setAttribute('y1', groundY);
+      groundLine.setAttribute('y2', groundY);
+      groundLine.setAttribute('stroke', topRoofCol);
+      groundLine.setAttribute('stroke-width', '2.5');
+      svgEl.appendChild(groundLine);
+
+      const txtL = document.createElementNS(ns, 'text');
+      txtL.setAttribute('x', marginX - 15);
+      txtL.setAttribute('y', groundY - 5);
+      txtL.setAttribute('fill', topRoofCol);
+      txtL.setAttribute('font-size', '10.5');
+      txtL.setAttribute('font-weight', '700');
+      txtL.setAttribute('text-anchor', 'end');
+      txtL.textContent = labelStart;
+      svgEl.appendChild(txtL);
+
+      const txtR = document.createElementNS(ns, 'text');
+      txtR.setAttribute('x', viewW - marginX + 15);
+      txtR.setAttribute('y', groundY - 5);
+      txtR.setAttribute('fill', topRoofCol);
+      txtR.setAttribute('font-size', '10.5');
+      txtR.setAttribute('font-weight', '700');
+      txtR.setAttribute('text-anchor', 'start');
+      txtR.textContent = labelEnd;
+      svgEl.appendChild(txtR);
+    }
+
+    function updateSectionsAndMarkers() {
+      if (!gridState.length) return;
+
+      const rowIdx = parseInt(document.getElementById('longRowSelect').value, 10);
+      const colIdx = parseInt(document.getElementById('transColSelect').value, 10);
+
+      const rowCenterPct = ((rowIdx + 0.5) / ROWS) * 100;
+      const colCenterPct = ((colIdx + 0.5) / COLS) * 100;
+
+      const cutLineH = document.getElementById('cutLineH');
+      const cutLineV = document.getElementById('cutLineV');
+
+      cutLineH.style.top = `${rowCenterPct}%`;
+      cutLineV.style.left = `${colCenterPct}%`;
+
+      // Corte Longitudinal A–A': mira hacia Sur (filas r > rowIdx), o hacia Norte si corta la última fila
+      const lookSouth = rowIdx < ROWS - 1;
+      const longArrow = lookSouth ? '▼' : '▲';
+      cutLineH.setAttribute('data-label-start', `A ${longArrow}`);
+      cutLineH.setAttribute('data-label-end', `${longArrow} A'`);
+
+      const longCells = gridState[rowIdx];
+      const longBehind = [];
+      if (lookSouth) {
+        for (let r = rowIdx + 1; r < ROWS; r++) {
+          longBehind.push(gridState[r]);
+        }
+      } else {
+        for (let r = rowIdx - 1; r >= 0; r--) {
+          longBehind.push(gridState[r]);
+        }
+      }
+
+      drawArchitecturalSection(
+        document.getElementById('svgLongitudinal'),
+        longCells,
+        longBehind,
+        440,
+        165,
+        'A',
+        "A'"
+      );
+
+      // Corte Transversal B–B': mira hacia Este (columnas c > colIdx), o hacia Oeste si corta la última columna
+      const lookEast = colIdx < COLS - 1;
+      const transArrow = lookEast ? '▶' : '◀';
+      cutLineV.setAttribute('data-label-start', `B ${transArrow}`);
+      cutLineV.setAttribute('data-label-end', `${transArrow} B'`);
+
+      const transCells = gridState.map(r => r[colIdx]);
+      const transBehind = [];
+      if (lookEast) {
+        for (let c = colIdx + 1; c < COLS; c++) {
+          transBehind.push(gridState.map(r => r[c]));
+        }
+      } else {
+        for (let c = colIdx - 1; c >= 0; c--) {
+          transBehind.push(gridState.map(r => r[c]));
+        }
+      }
+
+      drawArchitecturalSection(
+        document.getElementById('svgTransversal'),
+        transCells,
+        transBehind,
+        240,
+        165,
+        'B',
+        "B'"
+      );
+    }
+
+    function computeCounts(grid) {
+      const onlyUpper3D = document.getElementById('chartOnlyUpper').checked;
+      const counts = {
+        green: 0,
+        yellow: 0,
+        red: 0,
+        violet: 0,
+        blue: 0
+      };
+
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          const cell = grid[r][c];
+          if (!onlyUpper3D) {
+            counts[cell.color.id] = (counts[cell.color.id] || 0) + 1;
+          } else {
+            if (cell.color.id === 'green' || cell.stack.length === 0) {
+              counts.green += 1;
+            } else {
+              cell.stack.forEach(lvl => {
+                if (lvl) {
+                  counts[lvl.id] = (counts[lvl.id] || 0) + 1;
+                }
+              });
+            }
+          }
+        }
+      }
+      return counts;
+    }
+
+    function renderPieChart(counts) {
+      const onlyUpper3D = document.getElementById('chartOnlyUpper').checked;
+      const svg = document.getElementById('pieChart');
+      svg.innerHTML = '';
+
+      const categories = [
+        COLORS.yellow,
+        COLORS.red,
+        COLORS.violet,
+        COLORS.blue,
+        COLORS.green
+      ];
+
+      const total = categories.reduce((acc, item) => acc + (counts[item.id] || 0), 0);
+
+      document.getElementById('pieTotal').textContent = total;
+      document.getElementById('pieSub').textContent = onlyUpper3D ? 'módulos' : 'celdas';
+      document.getElementById('chartScopeLabel').textContent = onlyUpper3D
+        ? 'Volumen completo (N1–N6)'
+        : 'Planta Baja (24 celdas)';
+
+      const radius = 38;
+      const circumference = 2 * Math.PI * radius;
+      let cumulativePercent = 0;
+
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      const bgCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      bgCircle.setAttribute('cx', '50');
+      bgCircle.setAttribute('cy', '50');
+      bgCircle.setAttribute('r', radius.toString());
+      bgCircle.setAttribute('fill', 'transparent');
+      bgCircle.setAttribute('stroke', isLight ? '#e4e4e7' : '#18181b');
+      bgCircle.setAttribute('stroke-width', '18');
+      svg.appendChild(bgCircle);
+
+      if (total > 0) {
+        categories.forEach(item => {
+          const val = counts[item.id] || 0;
+          if (val <= 0) return;
+
+          const percent = val / total;
+          const strokeDasharray = `${percent * circumference} ${circumference}`;
+          const strokeDashoffset = -cumulativePercent * circumference;
+
+          const slice = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          slice.setAttribute('cx', '50');
+          slice.setAttribute('cy', '50');
+          slice.setAttribute('r', radius.toString());
+          slice.setAttribute('fill', 'transparent');
+          slice.setAttribute('stroke', item.hex);
+          slice.setAttribute('stroke-width', '18');
+          slice.setAttribute('stroke-dasharray', strokeDasharray);
+          slice.setAttribute('stroke-dashoffset', strokeDashoffset.toString());
+          slice.style.transition = 'stroke-dasharray 0.35s ease, stroke-dashoffset 0.35s ease';
+
+          const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+          title.textContent = `${item.name}: ${val} (${(percent * 100).toFixed(1)}%)`;
+          slice.appendChild(title);
+
+          svg.appendChild(slice);
+          cumulativePercent += percent;
+        });
+      }
+
+      const legendEl = document.getElementById('legend');
+      legendEl.innerHTML = '';
+
+      categories.forEach(item => {
+        const val = counts[item.id] || 0;
+        const pct = total > 0 ? ((val / total) * 100).toFixed(1) : '0.0';
+
+        const row = document.createElement('div');
+        row.className = 'legend-row';
+        row.innerHTML = `
+          <span class="swatch" style="background:${item.hex}"></span>
+          <span class="usage-name">${item.name}</span>
+          <span class="usage-count">${val}</span>
+          <span class="usage-pct">${pct}%</span>
+        `;
+        legendEl.appendChild(row);
+      });
+    }
+
+    /**
+     * Renderiza las 6 plantas individuales de la variante generada:
+     * - Planta Baja (Nivel 1)
+     * - Primer Nivel (Nivel 2)
+     * - Segundo Nivel (Nivel 3)
+     * - Tercer Nivel (Nivel 4)
+     * - Cuarto Nivel (Nivel 5)
+     * - Quinto Nivel (Nivel 6 — Retiro perimetral)
+     */
+    function renderLevelPlans(grid) {
+      const container = document.getElementById('levelsPlansContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const levelSpecs = [
+        { zIdx: 0, title: 'Planta Baja',   tag: 'Nivel 1 · Cota ±0.00' },
+        { zIdx: 1, title: 'Primer Nivel',  tag: 'Nivel 2' },
+        { zIdx: 2, title: 'Segundo Nivel', tag: 'Nivel 3' },
+        { zIdx: 3, title: 'Tercer Nivel',  tag: 'Nivel 4' },
+        { zIdx: 4, title: 'Cuarto Nivel',  tag: 'Nivel 5' },
+        { zIdx: 5, title: 'Quinto Nivel',  tag: 'Nivel 6 · Retiro perimetral' }
+      ];
+
+      levelSpecs.forEach(spec => {
+        const card = document.createElement('div');
+        card.className = 'level-plan-item';
+
+        const header = document.createElement('div');
+        header.className = 'level-plan-header';
+        header.innerHTML = `
+          <span class="level-plan-title">${spec.title}</span>
+          <span class="level-plan-tag">${spec.tag}</span>
+        `;
+        card.appendChild(header);
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'mini-plan-wrapper';
+
+        const miniGrid = document.createElement('div');
+        miniGrid.className = 'mini-plan-grid';
+
+        let builtCount = 0;
+        let specialNoteCount = 0;
+
+        for (let r = 0; r < ROWS; r++) {
+          for (let c = 0; c < COLS; c++) {
+            const cell = grid[r][c];
+            const miniCell = document.createElement('div');
+            miniCell.className = 'mini-cell';
+
+            if (spec.zIdx === 0) {
+              // Planta Baja (Nivel 1)
+              miniCell.style.backgroundColor = cell.color.hex;
+              miniCell.title = `${spec.title} [${r + 1},${c + 1}]: ${cell.color.name}`;
+              if (cell.color.id !== 'green') {
+                builtCount++;
+              } else {
+                specialNoteCount++;
+              }
+
+              // Permitir interacción directa desde Planta Baja
+              if (!cell.fixed) {
+                miniCell.style.cursor = 'pointer';
+                miniCell.addEventListener('click', () => {
+                  const maxVarGreens = document.getElementById('allowVariableGreen').checked ? 2 : 0;
+                  const currentVarGreens = countVariableGreens(gridState);
+
+                  if (cell.color.id === 'green') {
+                    cell.color = BUILT_PALETTE[0];
+                  } else {
+                    const idx = BUILT_PALETTE.findIndex(p => p.id === cell.color.id);
+                    if (idx < BUILT_PALETTE.length - 1) {
+                      cell.color = BUILT_PALETTE[idx + 1];
+                    } else if (currentVarGreens < maxVarGreens) {
+                      cell.color = COLORS.green;
+                    } else {
+                      cell.color = BUILT_PALETTE[0];
+                    }
+                  }
+
+                  cell.merged = false;
+                  const res = consolidateGrid(gridState);
+                  renderGrid(res.grid, `Ajuste manual · ${res.totalChanges} celda(s) consolidada(s)`);
+                });
+              }
+            } else {
+              // Niveles superiores (Primer Nivel a Quinto Nivel)
+              if (cell.color.id === 'green' || cell.stack.length === 0) {
+                miniCell.classList.add('patio-open');
+                miniCell.title = `${spec.title} [${r + 1},${c + 1}]: Vacío patio verde (abierto al cielo)`;
+              } else {
+                const levelModule = cell.stack[spec.zIdx];
+                if (levelModule) {
+                  miniCell.style.backgroundColor = levelModule.hex;
+                  miniCell.title = `${spec.title} [${r + 1},${c + 1}]: ${levelModule.name}`;
+                  builtCount++;
+                } else if (levelModule === null) {
+                  miniCell.classList.add('void-opening');
+                  miniCell.title = `${spec.title} [${r + 1},${c + 1}]: Vano / vacío interior en edificio`;
+                  specialNoteCount++;
+                } else {
+                  miniCell.classList.add('terrace-setback');
+                  miniCell.title = `${spec.title} [${r + 1},${c + 1}]: Terraza descubierta por retiro perimetral`;
+                  specialNoteCount++;
+                }
+              }
+            }
+
+            miniGrid.appendChild(miniCell);
+          }
+        }
+
+        wrapper.appendChild(miniGrid);
+        card.appendChild(wrapper);
+
+        const meta = document.createElement('div');
+        meta.className = 'level-plan-meta';
+        if (spec.zIdx === 0) {
+          meta.innerHTML = `<span>Edificado PB: ${builtCount}/24</span><span>Patio verde: ${specialNoteCount}</span>`;
+        } else if (spec.zIdx === 5) {
+          meta.innerHTML = `<span>Construido: ${builtCount} mód.</span><span>Terrazas retiro: ${specialNoteCount}</span>`;
+        } else {
+          meta.innerHTML = `<span>Construido: ${builtCount} mód.</span><span>Vanos interiores: ${specialNoteCount}</span>`;
+        }
+        card.appendChild(meta);
+
+        container.appendChild(card);
+      });
+    }
+
+    function renderGrid(grid, infoText) {
+      const gridEl = document.getElementById('grid');
+      gridEl.innerHTML = '';
+
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          const cell = grid[r][c];
+
+          const div = document.createElement('div');
+          let extraClass = '';
+          if (cell.merged) extraClass += ' merged-flash';
+          if (cell.color.id === 'green' && !cell.fixed) {
+            extraClass += ' green-exit-badge';
+          }
+
+          div.className = 'cell' + extraClass;
+          div.style.backgroundColor = cell.color.hex;
+
+          if (!cell.fixed) {
+            div.style.cursor = 'pointer';
+            div.title = 'Tocar para rotar uso de Planta Baja';
+            div.addEventListener('click', () => {
+              const maxVarGreens = document.getElementById('allowVariableGreen').checked ? 2 : 0;
+              const currentVarGreens = countVariableGreens(gridState);
+
+              if (cell.color.id === 'green') {
+                cell.color = BUILT_PALETTE[0];
+              } else {
+                const idx = BUILT_PALETTE.findIndex(p => p.id === cell.color.id);
+                if (idx < BUILT_PALETTE.length - 1) {
+                  cell.color = BUILT_PALETTE[idx + 1];
+                } else if (currentVarGreens < maxVarGreens) {
+                  cell.color = COLORS.green;
+                } else {
+                  cell.color = BUILT_PALETTE[0];
+                }
+              }
+
+              cell.merged = false;
+              const res = consolidateGrid(gridState);
+              renderGrid(res.grid, `Ajuste manual · ${res.totalChanges} celda(s) consolidada(s)`);
+            });
+          } else {
+            div.title = 'Verde fijo en PB (patio abierto al cielo en toda su altura)';
+          }
+
+          gridEl.appendChild(div);
+        }
+      }
+
+      const counts = computeCounts(grid);
+      renderPieChart(counts);
+      renderAxonometric(grid);
+      renderLevelPlans(grid);
+      document.getElementById('stats').textContent = infoText;
+      updateSectionsAndMarkers();
+    }
+
+    function generateFull() {
+      pendingRawGrid = null;
+      document.getElementById('btnStep').textContent = 'Paso a paso';
+      const raw = createRandomGrid();
+      const result = consolidateGrid(raw);
+      gridState = result.grid;
+      const varGreens = countVariableGreens(gridState);
+      renderGrid(
+        gridState,
+        `Celdas unificadas: ${result.totalChanges} · Salidas verdes variables: ${varGreens}/2`
+      );
+    }
+
+    function handleStep() {
+      if (!pendingRawGrid) {
+        pendingRawGrid = createRandomGrid();
+        gridState = pendingRawGrid;
+        document.getElementById('btnStep').textContent = 'Unificar →';
+        renderGrid(gridState, 'Paso 1: Distribución aleatoria cruda (sin unificar)');
+      } else {
+        const result = consolidateGrid(pendingRawGrid);
+        gridState = result.grid;
+        pendingRawGrid = null;
+        document.getElementById('btnStep').textContent = 'Paso a paso';
+        const varGreens = countVariableGreens(gridState);
+        renderGrid(
+          gridState,
+          `Paso 2: ${result.totalChanges} unificada(s) · Salidas verdes variables: ${varGreens}/2`
+        );
+      }
+    }
+
+    function initApp() {
+      try {
+        document.getElementById('btnGenerate').addEventListener('click', generateFull);
+        document.getElementById('btnStep').addEventListener('click', handleStep);
+        document.getElementById('allowVariableGreen').addEventListener('change', generateFull);
+        document.getElementById('enableVolumeVoids').addEventListener('change', () => {
+          if (gridState.length) {
+            applyVolumeVoids(gridState);
+            renderGrid(gridState, document.getElementById('stats').textContent);
+          }
+        });
+        document.getElementById('includeFixedInMerge').addEventListener('change', generateFull);
+        document.getElementById('iterativeMerge').addEventListener('change', generateFull);
+        document.getElementById('chartOnlyUpper').addEventListener('change', () => {
+          if (gridState.length) {
+            renderGrid(gridState, document.getElementById('stats').textContent);
+          }
+        });
+        document.getElementById('longRowSelect').addEventListener('change', updateSectionsAndMarkers);
+        document.getElementById('transColSelect').addEventListener('change', updateSectionsAndMarkers);
+        window.addEventListener('resize', updateSectionsAndMarkers);
+
+        generateFull();
+      } catch (err) {
+        const statsEl = document.getElementById('stats');
+        if (statsEl) statsEl.textContent = 'Error al inicializar: ' + err.message;
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initApp);
+    } else {
+      initApp();
+    }
+  </script>
+</body>
+</html>
