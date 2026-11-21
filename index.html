@@ -932,7 +932,7 @@
         <div class="subtitle">Patio Verde Abierto al Cielo (Dona) · Edificios Solo en Colores · Vanos 1–2 Niveles y Retiro N6</div>
       </div>
       <div class="actions">
-        <button id="btnTheme" class="secondary" title="Cambiar tema negro / claro">☀️ Claro</button>
+        <button id="btnTheme" class="secondary" title="Cambiar tema Oscuro / claro">Claro</button>
         <button id="btnGenerate">Generar</button>
         <button id="btnStep" class="secondary" title="Genera primero sin unificar para ver qué celdas corrige la regla">Paso a paso</button>
       </div>
@@ -1128,14 +1128,14 @@
     let gridState = [];
     let pendingRawGrid = null;
 
-    // Control de Tema Negro Puro / Claro
+    // Control de Tema Oscuro Puro / Claro
     const btnTheme = document.getElementById('btnTheme');
     let currentTheme = 'dark';
 
     function setTheme(theme) {
       currentTheme = theme;
       document.documentElement.setAttribute('data-theme', theme);
-      btnTheme.textContent = theme === 'dark' ? '☀️ Claro' : '🌑 Negro';
+      btnTheme.textContent = theme === 'dark' ? 'Claro' : 'Oscuro';
       try {
         localStorage.setItem('manzanas_theme', theme);
       } catch (e) {}
